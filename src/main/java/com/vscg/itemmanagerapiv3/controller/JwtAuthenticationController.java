@@ -2,6 +2,7 @@ package com.vscg.itemmanagerapiv3.controller;
 
 import java.util.Objects;
 
+import com.vscg.itemmanagerapiv3.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,5 +56,10 @@ public class JwtAuthenticationController {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+        return ResponseEntity.ok(userDetailsService.save(user));
     }
 }
