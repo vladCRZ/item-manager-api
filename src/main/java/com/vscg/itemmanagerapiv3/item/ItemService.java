@@ -31,13 +31,13 @@ public class ItemService {
     }
 
     public Item updateItem(Long id, Item newItem) throws ItemNotFoundException {
-        Optional<Item> currentItemOptional = getItem(id);
+        Optional<Item> currentItemOptional = itemRepository.findById(id);
         if (currentItemOptional.isPresent()) {
             Item currentItem = currentItemOptional.get();
             currentItem.setTitle(newItem.getTitle());
             currentItem.setFullDescription(newItem.getFullDescription());
             currentItem.setPrice(newItem.getPrice());
-            saveItem(currentItem);
+            itemRepository.save(currentItem);
             return currentItem;
         } else {
             throw new ItemNotFoundException(id);

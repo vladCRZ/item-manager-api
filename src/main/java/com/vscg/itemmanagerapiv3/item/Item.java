@@ -1,5 +1,6 @@
 package com.vscg.itemmanagerapiv3.item;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "item")
+@AllArgsConstructor
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,4 +20,5 @@ public class Item {
     private String fullDescription;
 
     private String price;
+
 }
