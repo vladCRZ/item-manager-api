@@ -1,5 +1,6 @@
 package com.vscg.itemmanagerapiv3.item;
 
+import lombok.SneakyThrows;
 import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -79,7 +82,6 @@ class ItemServiceTest {
     }
 
     @Test
-    @Ignore
     void updateItem() throws ItemNotFoundException {
         //Item item = new Item(
         //        1L, "Laptop HP", "Good performance Laptop", "$1455");
@@ -89,9 +91,32 @@ class ItemServiceTest {
                 "Apple computer", "$2144");
 
         when(itemRepository.findById(1L)).thenReturn(Optional.of(anyItem));
-        doNothing().when(itemRepository).save(anyItem);
+        when(itemRepository.save(anyItem)).thenReturn(anyItem);
 
-        itemService.updateItem(1L, anyItem );
+        Item updatedItem = itemService.updateItem(1L, anyItem );
+
+
+        assertThat(updatedItem, instanceOf(Item.class));
+
+    }
+
+    @Test
+    void updateItemExceptionCase() {
+        //Item item = new Item(
+        //        1L, "Laptop HP", "Good performance Laptop", "$1455");
+        //Item UpdatedItem = itemService.updateItem();
+
+        Item anyItem = new Item(2L, "MacBook",
+                "Apple computer", "$2144");
+
+        when(itemRepository.findById(2L)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ItemNotFoundException.class, () -> {
+            Item updatedItem = itemService.updateItem(2L, anyItem );
+        });
+
+
+        assertTrue(exception.getMessage().contains("No item were found for id"));
 
     }
 
